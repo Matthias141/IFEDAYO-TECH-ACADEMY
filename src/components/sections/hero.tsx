@@ -19,12 +19,12 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:col-span-7 lg:row-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 sm:p-12 relative overflow-hidden min-h-[450px] flex flex-col justify-center glow-card"
+            className="lg:col-span-7 lg:row-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 lg:p-12 relative overflow-hidden min-h-[400px] sm:min-h-[450px] flex flex-col justify-center glow-card"
           >
-            {/* 3D Particle Blob in background */}
-            <div className="absolute -top-10 -right-10 opacity-60">
+            {/* 3D Particle Blob in background - hidden on small mobile */}
+            <div className="absolute -top-10 -right-10 opacity-60 hidden sm:block">
               <FloatingElement amplitude={15} duration={4}>
-                <GlowingParticleBlob size={350} />
+                <GlowingParticleBlob size={280} />
               </FloatingElement>
             </div>
 
@@ -92,11 +92,11 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* 3D Particle Sphere Card */}
-          <RevealOnScroll direction="right">
-            <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[260px] glow-card">
+          {/* 3D Particle Sphere Card - hidden on mobile for performance */}
+          <RevealOnScroll direction="right" className="hidden sm:block lg:col-span-5">
+            <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[220px] lg:min-h-[260px] glow-card">
               <FloatingElement amplitude={10} duration={5}>
-                <ParticleSphere3D size={220} />
+                <ParticleSphere3D size={180} />
               </FloatingElement>
               <div className="absolute bottom-4 left-4">
                 <p className="text-xs text-gray-600 uppercase tracking-wider">Expert Guidance</p>
@@ -104,31 +104,33 @@ export function Hero() {
             </div>
           </RevealOnScroll>
 
-          {/* Stats Cards Row */}
-          <RevealOnScroll direction="up">
-            <div className="lg:col-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 flex flex-col justify-between min-h-[120px] glow-card">
-              <div className="text-2xl sm:text-3xl font-bold text-white">95%</div>
-              <p className="text-xs text-gray-600 uppercase tracking-wider">Success Rate</p>
-            </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll direction="up">
-            <div className="lg:col-span-3 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 flex flex-col justify-between min-h-[120px] relative overflow-hidden glow-card">
-              <div className="absolute right-2 bottom-2 opacity-15">
-                <DotGrid cols={4} rows={4} spacing={10} />
+          {/* Stats Cards Row - grid layout for mobile */}
+          <div className="grid grid-cols-2 gap-4 sm:contents">
+            <RevealOnScroll direction="up">
+              <div className="lg:col-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-4 sm:p-5 flex flex-col justify-between min-h-[100px] sm:min-h-[120px] glow-card">
+                <div className="text-2xl sm:text-3xl font-bold text-white">95%</div>
+                <p className="text-[10px] sm:text-xs text-gray-600 uppercase tracking-wider">Success Rate</p>
               </div>
-              <div className="relative">
-                <div className="text-2xl sm:text-3xl font-bold text-white">200+</div>
-                <p className="text-xs text-gray-600 uppercase tracking-wider">Hours Delivered</p>
-              </div>
-            </div>
-          </RevealOnScroll>
+            </RevealOnScroll>
 
-          {/* Glowing Torus Card */}
-          <RevealOnScroll direction="left">
-            <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl flex items-center justify-center relative overflow-hidden min-h-[200px] glow-card">
+            <RevealOnScroll direction="up">
+              <div className="lg:col-span-3 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-4 sm:p-5 flex flex-col justify-between min-h-[100px] sm:min-h-[120px] relative overflow-hidden glow-card">
+                <div className="absolute right-2 bottom-2 opacity-15 hidden sm:block">
+                  <DotGrid cols={4} rows={4} spacing={10} />
+                </div>
+                <div className="relative">
+                  <div className="text-2xl sm:text-3xl font-bold text-white">200+</div>
+                  <p className="text-[10px] sm:text-xs text-gray-600 uppercase tracking-wider">Hours Delivered</p>
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          {/* Glowing Torus Card - hidden on mobile for performance */}
+          <RevealOnScroll direction="left" className="hidden sm:block lg:col-span-5">
+            <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl flex items-center justify-center relative overflow-hidden min-h-[180px] lg:min-h-[200px] glow-card">
               <FloatingElement amplitude={8} duration={6}>
-                <GlowingTorus size={200} />
+                <GlowingTorus size={160} />
               </FloatingElement>
               <div className="absolute bottom-4 left-4">
                 <p className="text-xs text-gray-600 uppercase tracking-wider">Continuous Growth</p>
@@ -136,45 +138,55 @@ export function Hero() {
             </div>
           </RevealOnScroll>
 
-          {/* Feature cards with icons */}
-          <RevealOnScroll direction="up">
-            <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden glow-card hover:border-white/[0.1] transition-colors">
-              <div className="relative">
-                <IconCircle size={40} className="mb-4">
-                  <Users className="w-4 h-4 text-gray-400" />
-                </IconCircle>
-                <h3 className="text-base font-semibold text-white mb-1">1-on-1 Mentoring</h3>
-                <p className="text-sm text-gray-500">Personalized sessions for your goals</p>
+          {/* Feature cards with icons - grid on mobile */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:contents">
+            <RevealOnScroll direction="up">
+              <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 sm:p-6 relative overflow-hidden glow-card hover:border-white/[0.1] transition-colors">
+                <div className="relative flex sm:block items-center gap-4">
+                  <IconCircle size={36} className="sm:mb-4 flex-shrink-0">
+                    <Users className="w-4 h-4 text-gray-400" />
+                  </IconCircle>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-semibold text-white mb-0.5 sm:mb-1">1-on-1 Mentoring</h3>
+                    <p className="text-xs sm:text-sm text-gray-500">Personalized sessions for your goals</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </RevealOnScroll>
+            </RevealOnScroll>
 
-          <RevealOnScroll direction="up">
-            <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden glow-card hover:border-white/[0.1] transition-colors">
-              <div className="relative">
-                <IconCircle size={40} className="mb-4">
-                  <FileText className="w-4 h-4 text-gray-400" />
-                </IconCircle>
-                <h3 className="text-base font-semibold text-white mb-1">CV Optimization</h3>
-                <p className="text-sm text-gray-500">Get noticed by top recruiters</p>
+            <RevealOnScroll direction="up">
+              <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 sm:p-6 relative overflow-hidden glow-card hover:border-white/[0.1] transition-colors">
+                <div className="relative flex sm:block items-center gap-4">
+                  <IconCircle size={36} className="sm:mb-4 flex-shrink-0">
+                    <FileText className="w-4 h-4 text-gray-400" />
+                  </IconCircle>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-semibold text-white mb-0.5 sm:mb-1">CV Optimization</h3>
+                    <p className="text-xs sm:text-sm text-gray-500">Get noticed by top recruiters</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </RevealOnScroll>
+            </RevealOnScroll>
 
-          <RevealOnScroll direction="up">
-            <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 glow-card hover:border-white/[0.1] transition-colors">
-              <IconCircle size={40} className="mb-4">
-                <Target className="w-4 h-4 text-gray-400" />
-              </IconCircle>
-              <h3 className="text-base font-semibold text-white mb-1">Career Strategy</h3>
-              <p className="text-sm text-gray-500">Map your path to DevOps</p>
-            </div>
-          </RevealOnScroll>
+            <RevealOnScroll direction="up">
+              <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 sm:p-6 glow-card hover:border-white/[0.1] transition-colors">
+                <div className="flex sm:block items-center gap-4">
+                  <IconCircle size={36} className="sm:mb-4 flex-shrink-0">
+                    <Target className="w-4 h-4 text-gray-400" />
+                  </IconCircle>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-semibold text-white mb-0.5 sm:mb-1">Career Strategy</h3>
+                    <p className="text-xs sm:text-sm text-gray-500">Map your path to DevOps</p>
+                  </div>
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
 
-          {/* Wave visualization spanning full width */}
-          <RevealOnScroll direction="up" className="lg:col-span-12">
-            <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl relative overflow-hidden min-h-[180px] flex items-center justify-center glow-card">
-              <ParticleWave3D size={800} height={180} />
+          {/* Wave visualization spanning full width - hidden on mobile */}
+          <RevealOnScroll direction="up" className="hidden sm:block lg:col-span-12">
+            <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl relative overflow-hidden min-h-[140px] lg:min-h-[180px] flex items-center justify-center glow-card">
+              <ParticleWave3D size={600} height={140} />
               <div className="absolute bottom-4 left-6">
                 <p className="text-xs text-gray-600 uppercase tracking-wider">Your Journey Starts Here</p>
               </div>
