@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ParticleSphere } from "@/components/ui/particle-background";
+import { GlowingTorus, FloatingParticles } from "@/components/ui/three-visualizations";
 
 export function CTA() {
   return (
@@ -11,12 +11,17 @@ export function CTA() {
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Card container */}
         <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 sm:p-12 lg:p-16 overflow-hidden">
-          {/* Particle sphere decoration */}
-          <div className="absolute -right-20 -top-20 opacity-40">
-            <ParticleSphere size={200} />
+          {/* 3D Torus decoration */}
+          <div className="absolute -right-16 -top-16 opacity-50">
+            <GlowingTorus size={280} />
           </div>
 
-          <div className="relative text-center">
+          {/* Floating particles throughout */}
+          <div className="absolute inset-0 pointer-events-none opacity-60">
+            <FloatingParticles width={800} height={400} />
+          </div>
+
+          <div className="relative text-center z-10">
             {/* Headline */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
               Ready to Start Your<br />

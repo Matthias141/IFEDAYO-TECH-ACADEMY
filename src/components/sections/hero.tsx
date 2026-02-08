@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { ArrowRight, Users, FileText, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ParticleSphere, ParticleBlob, ParticleTorus, CircleRing, IconCircle, DotGrid } from "@/components/ui/particle-background";
+import { GlowingParticleBlob, ParticleSphere3D, GlowingTorus, ParticleWave3D } from "@/components/ui/three-visualizations";
+import { DotGrid, IconCircle } from "@/components/ui/particle-background";
 
 export function Hero() {
   return (
@@ -13,12 +14,12 @@ export function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Main Hero Card - spans 7 columns */}
           <div className="lg:col-span-7 lg:row-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 sm:p-12 relative overflow-hidden min-h-[450px] flex flex-col justify-center">
-            {/* Subtle particle blob in background */}
-            <div className="absolute -top-20 -right-20 opacity-30">
-              <ParticleBlob size={300} />
+            {/* 3D Particle Blob in background */}
+            <div className="absolute -top-10 -right-10 opacity-60">
+              <GlowingParticleBlob size={350} />
             </div>
 
-            <div className="relative">
+            <div className="relative z-10">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
@@ -57,9 +58,9 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Particle Sphere Card */}
-          <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[220px]">
-            <ParticleSphere size={160} />
+          {/* 3D Particle Sphere Card */}
+          <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[260px]">
+            <ParticleSphere3D size={220} />
             <div className="absolute bottom-4 left-4">
               <p className="text-xs text-gray-600 uppercase tracking-wider">Expert Guidance</p>
             </div>
@@ -81,11 +82,16 @@ export function Hero() {
             </div>
           </div>
 
+          {/* Glowing Torus Card */}
+          <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl flex items-center justify-center relative overflow-hidden min-h-[200px]">
+            <GlowingTorus size={200} />
+            <div className="absolute bottom-4 left-4">
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Continuous Growth</p>
+            </div>
+          </div>
+
           {/* Feature cards with icons */}
           <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden">
-            <div className="absolute -right-12 -bottom-12 opacity-30">
-              <CircleRing size={140} />
-            </div>
             <div className="relative">
               <IconCircle size={40} className="mb-4">
                 <Users className="w-4 h-4 text-gray-400" />
@@ -96,9 +102,6 @@ export function Hero() {
           </div>
 
           <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden">
-            <div className="absolute -right-10 -top-10 opacity-20">
-              <ParticleTorus size={120} />
-            </div>
             <div className="relative">
               <IconCircle size={40} className="mb-4">
                 <FileText className="w-4 h-4 text-gray-400" />
@@ -114,6 +117,14 @@ export function Hero() {
             </IconCircle>
             <h3 className="text-base font-semibold text-white mb-1">Career Strategy</h3>
             <p className="text-sm text-gray-500">Map your path to DevOps</p>
+          </div>
+
+          {/* Wave visualization spanning full width */}
+          <div className="lg:col-span-12 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl relative overflow-hidden min-h-[180px] flex items-center justify-center">
+            <ParticleWave3D size={800} height={180} />
+            <div className="absolute bottom-4 left-6">
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Your Journey Starts Here</p>
+            </div>
           </div>
         </div>
       </div>

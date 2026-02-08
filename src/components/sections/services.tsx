@@ -12,7 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { servicesData } from "@/lib/services-data";
 import { formatPrice, formatDuration, getServiceTypeLabel } from "@/lib/utils";
-import { ParticleWave, IconCircle } from "@/components/ui/particle-background";
+import { ParticleWave3D, GlowingTorus, ParticleSphere3D } from "@/components/ui/three-visualizations";
+import { IconCircle } from "@/components/ui/particle-background";
 
 const iconMap: Record<string, typeof Video> = {
   video: Video,
@@ -48,18 +49,30 @@ export function Services() {
             return (
               <div
                 key={service.slug}
-                className={`group relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] ${
+                className={`group relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] overflow-hidden ${
                   isLarge ? "lg:col-span-2 lg:row-span-2" : ""
                 }`}
               >
-                {/* Wave visualization for large card */}
+                {/* 3D Wave visualization for large card */}
                 {isLarge && (
-                  <div className="absolute bottom-0 left-0 right-0 opacity-30 overflow-hidden rounded-b-2xl">
-                    <ParticleWave width={600} height={150} />
+                  <div className="absolute bottom-0 left-0 right-0 opacity-40 overflow-hidden rounded-b-2xl">
+                    <ParticleWave3D size={700} height={180} />
                   </div>
                 )}
 
-                <div className="relative">
+                {/* 3D decorations for other cards */}
+                {index === 1 && (
+                  <div className="absolute -right-12 -bottom-12 opacity-30">
+                    <GlowingTorus size={150} />
+                  </div>
+                )}
+                {index === 2 && (
+                  <div className="absolute -right-10 -top-10 opacity-25">
+                    <ParticleSphere3D size={120} />
+                  </div>
+                )}
+
+                <div className="relative z-10">
                   {/* Icon and Type */}
                   <div className="flex items-start justify-between mb-6">
                     <IconCircle size={48}>

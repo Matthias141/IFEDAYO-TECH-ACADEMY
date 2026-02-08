@@ -8,7 +8,8 @@ import {
   Server,
   Workflow,
 } from "lucide-react";
-import { NetworkDecoration, IconCircle } from "@/components/ui/particle-background";
+import { GlowingParticleBlob, FloatingParticles } from "@/components/ui/three-visualizations";
+import { IconCircle } from "@/components/ui/particle-background";
 
 const skills = [
   { icon: Container, label: "Docker" },
@@ -26,14 +27,21 @@ export function About() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Visual Side */}
           <div className="relative order-2 lg:order-1">
-            <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 min-h-[400px] flex items-center justify-center overflow-hidden">
-              {/* Network decoration background */}
-              <NetworkDecoration className="absolute inset-0 opacity-60" />
+            <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 min-h-[450px] flex items-center justify-center overflow-hidden">
+              {/* 3D Particle Blob as main visual */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <GlowingParticleBlob size={400} />
+              </div>
+
+              {/* Floating particles overlay */}
+              <div className="absolute inset-0 pointer-events-none">
+                <FloatingParticles width={400} height={450} />
+              </div>
 
               {/* Central element */}
-              <div className="relative">
+              <div className="relative z-10">
                 {/* Outer ring */}
-                <div className="w-48 h-48 rounded-full border border-white/[0.1] flex items-center justify-center">
+                <div className="w-48 h-48 rounded-full border border-white/[0.1] flex items-center justify-center backdrop-blur-sm bg-black/20">
                   {/* Middle ring */}
                   <div className="w-36 h-36 rounded-full border border-white/[0.08] flex items-center justify-center">
                     {/* Inner circle */}
@@ -69,10 +77,10 @@ export function About() {
               </div>
 
               {/* Floating badges */}
-              <div className="absolute top-6 right-6 px-3 py-1.5 rounded-full bg-[#111] border border-white/[0.08] text-gray-500 text-xs">
+              <div className="absolute top-6 right-6 px-3 py-1.5 rounded-full bg-[#111] border border-white/[0.08] text-gray-500 text-xs z-10">
                 AWS Certified
               </div>
-              <div className="absolute bottom-6 left-6 px-3 py-1.5 rounded-full bg-[#111] border border-white/[0.08] text-gray-500 text-xs">
+              <div className="absolute bottom-6 left-6 px-3 py-1.5 rounded-full bg-[#111] border border-white/[0.08] text-gray-500 text-xs z-10">
                 5+ Years
               </div>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { ParticleSphere, DotGrid } from "@/components/ui/particle-background";
+import { ParticleSphere3D, NetworkVisualization3D } from "@/components/ui/three-visualizations";
+import { DotGrid } from "@/components/ui/particle-background";
 
 const stats = [
   {
@@ -35,10 +36,10 @@ export function Stats() {
               key={stat.label}
               className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 overflow-hidden"
             >
-              {/* Decorations for specific cards */}
+              {/* 3D decorations for specific cards */}
               {index === 0 && (
-                <div className="absolute -right-8 -bottom-8 opacity-30">
-                  <ParticleSphere size={100} />
+                <div className="absolute -right-10 -bottom-10 opacity-40">
+                  <ParticleSphere3D size={140} />
                 </div>
               )}
               {index === 3 && (
@@ -57,6 +58,17 @@ export function Stats() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Large Network Visualization Card */}
+        <div className="mt-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 flex items-center justify-center min-h-[300px] relative overflow-hidden">
+          <NetworkVisualization3D size={350} />
+          <div className="absolute bottom-6 left-6">
+            <p className="text-xs text-gray-600 uppercase tracking-wider">Building Connections</p>
+          </div>
+          <div className="absolute bottom-6 right-6">
+            <p className="text-xs text-gray-600 uppercase tracking-wider">Growing Network</p>
+          </div>
         </div>
       </div>
     </section>
