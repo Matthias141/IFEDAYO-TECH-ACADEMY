@@ -2,6 +2,8 @@ export { Navbar } from "./navbar";
 export { Hero } from "./hero";
 export { Services } from "./services";
 export { Stats } from "./stats";
+export { Journey } from "./journey";
+export { Roadmap } from "./roadmap";
 export { About } from "./about";
 export { Testimonials } from "./testimonials";
 export { FAQ } from "./faq";
