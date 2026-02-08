@@ -1,39 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ParticleBackground, GlowingOrb } from "@/components/ui/particle-background";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-grid-pattern bg-grid-size opacity-30" />
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
+      {/* Particle Background */}
+      <ParticleBackground particleCount={60} connectionDistance={120} />
+
+      {/* Glowing Orbs */}
+      <GlowingOrb size={600} color="white" className="top-1/4 -left-48" blur={120} />
+      <GlowingOrb size={400} color="blue" className="bottom-1/4 -right-32" blur={100} />
+      <GlowingOrb size={300} color="white" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" blur={150} />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
         <div className="text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-fade-in">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 animate-fade-in">
+            <span className="w-2 h-2 rounded-full bg-white/40 animate-pulse" />
+            <span className="text-sm text-gray-400 font-medium">
               Join 50+ Nigerian tech talents
             </span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-slide-up">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-slide-up tracking-tight">
             Break Into{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-300 to-accent">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500">
               DevOps
             </span>
             <br />
-            With Expert Guidance
+            <span className="text-gray-400">With Expert Guidance</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up [animation-delay:100ms]">
+          <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto mb-12 leading-relaxed animate-slide-up [animation-delay:100ms]">
             Get personalized mentoring, CV optimization, and career coaching from
             an experienced DevOps engineer. Start your cloud journey today.
           </p>
@@ -43,31 +47,30 @@ export function Hero() {
             <Link href="/book">
               <Button size="lg" className="w-full sm:w-auto group">
                 Book Your Session
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Link href="#services">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto group">
-                <Play className="w-5 h-5 mr-2" />
+              <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 Explore Services
               </Button>
             </Link>
           </div>
 
           {/* Social Proof Quick Stats */}
-          <div className="mt-16 pt-8 border-t border-white/5 animate-fade-in [animation-delay:400ms]">
-            <div className="flex flex-wrap justify-center gap-8 sm:gap-12">
+          <div className="mt-20 pt-8 border-t border-white/[0.05] animate-fade-in [animation-delay:400ms]">
+            <div className="flex flex-wrap justify-center gap-12 sm:gap-16">
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">50+</div>
-                <div className="text-sm text-gray-500">Students Mentored</div>
+                <div className="text-sm text-gray-600">Students Mentored</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">200+</div>
-                <div className="text-sm text-gray-500">Hours of Sessions</div>
+                <div className="text-sm text-gray-600">Hours of Sessions</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl sm:text-4xl font-bold text-white mb-1">95%</div>
-                <div className="text-sm text-gray-500">Success Rate</div>
+                <div className="text-sm text-gray-600">Success Rate</div>
               </div>
             </div>
           </div>
@@ -76,8 +79,8 @@ export function Hero() {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-          <div className="w-1 h-2 bg-white/40 rounded-full animate-pulse" />
+        <div className="w-5 h-8 rounded-full border border-white/[0.15] flex items-start justify-center p-1.5">
+          <div className="w-0.5 h-1.5 bg-white/30 rounded-full animate-pulse" />
         </div>
       </div>
     </section>
