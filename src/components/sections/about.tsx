@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import {
   Cloud,
   Container,
@@ -9,82 +8,95 @@ import {
   Server,
   Workflow,
 } from "lucide-react";
+import { GlowingParticleBlob, FloatingParticles } from "@/components/ui/three-visualizations";
+import { IconCircle } from "@/components/ui/particle-background";
 
 const skills = [
-  { icon: Container, label: "Docker & Kubernetes" },
-  { icon: Cloud, label: "AWS / Azure / GCP" },
-  { icon: GitBranch, label: "CI/CD Pipelines" },
-  { icon: Server, label: "Infrastructure as Code" },
-  { icon: Shield, label: "Security & Compliance" },
+  { icon: Container, label: "Docker" },
+  { icon: Cloud, label: "AWS" },
+  { icon: GitBranch, label: "CI/CD" },
+  { icon: Server, label: "Terraform" },
+  { icon: Shield, label: "Security" },
   { icon: Workflow, label: "Automation" },
 ];
 
 export function About() {
   return (
-    <section id="about" className="relative py-20 sm:py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-
+    <section id="about" className="relative py-20 sm:py-28">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Image / Visual */}
-          <div className="relative">
-            <div className="aspect-square max-w-md mx-auto lg:max-w-none rounded-3xl bg-gradient-to-br from-primary/20 via-zinc-900 to-accent/20 p-1">
-              <div className="w-full h-full rounded-3xl bg-zinc-900 overflow-hidden flex items-center justify-center">
-                <div className="text-center p-8">
-                  {/* Abstract visual */}
-                  <div className="relative w-48 h-48 mx-auto mb-8">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-accent opacity-20 animate-pulse" />
-                    <div className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 animate-pulse [animation-delay:300ms]" />
-                    <div className="absolute inset-8 rounded-full bg-gradient-to-br from-primary/60 to-accent/60 animate-pulse [animation-delay:600ms]" />
-                    <div className="absolute inset-12 rounded-full bg-zinc-900 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                        ITA
-                      </span>
+          {/* Visual Side */}
+          <div className="relative order-2 lg:order-1">
+            <div className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 min-h-[450px] flex items-center justify-center overflow-hidden">
+              {/* 3D Particle Blob as main visual */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <GlowingParticleBlob size={400} />
+              </div>
+
+              {/* Floating particles overlay */}
+              <div className="absolute inset-0 pointer-events-none">
+                <FloatingParticles width={400} height={450} />
+              </div>
+
+              {/* Central element */}
+              <div className="relative z-10">
+                {/* Outer ring */}
+                <div className="w-48 h-48 rounded-full border border-white/[0.1] flex items-center justify-center backdrop-blur-sm bg-black/20">
+                  {/* Middle ring */}
+                  <div className="w-36 h-36 rounded-full border border-white/[0.08] flex items-center justify-center">
+                    {/* Inner circle */}
+                    <div className="w-24 h-24 rounded-full bg-[#111] border border-white/[0.1] flex items-center justify-center">
+                      <span className="text-2xl font-bold text-white/80">ITA</span>
                     </div>
                   </div>
-
-                  {/* Skills Grid */}
-                  <div className="grid grid-cols-3 gap-3">
-                    {skills.map((skill) => (
-                      <div
-                        key={skill.label}
-                        className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group"
-                      >
-                        <skill.icon className="w-6 h-6 mx-auto text-gray-400 group-hover:text-primary transition-colors" />
-                        <p className="text-[10px] text-gray-500 mt-2 group-hover:text-gray-300 transition-colors">
-                          {skill.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Floating badges */}
-            <div className="absolute -top-4 -right-4 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-medium animate-float">
-              AWS Certified
-            </div>
-            <div className="absolute -bottom-4 -left-4 px-4 py-2 rounded-full bg-accent/20 border border-accent/30 text-accent-300 text-sm font-medium animate-float [animation-delay:2s]">
-              5+ Years Exp
+                {/* Floating skill icons around the circle */}
+                {skills.map((skill, index) => {
+                  const angle = (index * 60 - 90) * (Math.PI / 180);
+                  const radius = 130;
+                  const x = Math.cos(angle) * radius;
+                  const y = Math.sin(angle) * radius;
+
+                  return (
+                    <div
+                      key={skill.label}
+                      className="absolute"
+                      style={{
+                        left: `calc(50% + ${x}px - 18px)`,
+                        top: `calc(50% + ${y}px - 18px)`,
+                      }}
+                      title={skill.label}
+                    >
+                      <IconCircle size={36}>
+                        <skill.icon className="w-4 h-4 text-gray-500" />
+                      </IconCircle>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Floating badges */}
+              <div className="absolute top-6 right-6 px-3 py-1.5 rounded-full bg-[#111] border border-white/[0.08] text-gray-500 text-xs z-10">
+                AWS Certified
+              </div>
+              <div className="absolute bottom-6 left-6 px-3 py-1.5 rounded-full bg-[#111] border border-white/[0.08] text-gray-500 text-xs z-10">
+                5+ Years
+              </div>
             </div>
           </div>
 
-          {/* Content */}
-          <div>
-            <Badge variant="primary" className="mb-4">
+          {/* Content Side */}
+          <div className="order-1 lg:order-2">
+            <p className="text-xs text-gray-600 uppercase tracking-wider mb-3">
               About Me
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-              Your Guide to a{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                DevOps Career
-              </span>
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight">
+              Your Guide to a<br />
+              <span className="text-gray-500">DevOps Career</span>
             </h2>
 
-            <div className="space-y-4 text-gray-400 leading-relaxed">
+            <div className="space-y-4 text-gray-500 leading-relaxed text-sm">
               <p>
                 Hi, I&apos;m Ifedayo. Over the past 5+ years, I&apos;ve worked as a DevOps
                 Engineer across multiple industries, helping companies build
@@ -99,20 +111,20 @@ export function About() {
               <p>
                 My approach is practical and personalized. Whether you&apos;re
                 transitioning from development, system administration, or starting
-                fresh, I&apos;ll help you build the skills and confidence you need to
-                land your dream DevOps role.
+                fresh, I&apos;ll help you build the skills and confidence you need.
               </p>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Badge variant="outline">Docker</Badge>
-              <Badge variant="outline">Kubernetes</Badge>
-              <Badge variant="outline">Terraform</Badge>
-              <Badge variant="outline">AWS</Badge>
-              <Badge variant="outline">CI/CD</Badge>
-              <Badge variant="outline">Linux</Badge>
-              <Badge variant="outline">Python</Badge>
-              <Badge variant="outline">Bash</Badge>
+            {/* Skills as minimal tags */}
+            <div className="mt-8 flex flex-wrap gap-2">
+              {["Docker", "Kubernetes", "Terraform", "AWS", "CI/CD", "Linux", "Python", "Bash"].map((skill) => (
+                <span
+                  key={skill}
+                  className="px-3 py-1 text-xs text-gray-600 border border-white/[0.08] rounded-full"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
         </div>

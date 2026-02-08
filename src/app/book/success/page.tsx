@@ -52,7 +52,7 @@ function SuccessContent() {
       <Navbar />
       <main className="min-h-screen pt-24 pb-16 flex items-center justify-center">
         <div className="max-w-lg mx-auto px-4 w-full">
-          <Card variant="glass" className="text-center">
+          <Card variant="solid" className="text-center">
             <CardContent className="py-12">
               {status === "loading" && (
                 <>

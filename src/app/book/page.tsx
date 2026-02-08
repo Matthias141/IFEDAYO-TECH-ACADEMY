@@ -251,7 +251,7 @@ function BookContent() {
                   return (
                     <Card
                       key={service.slug}
-                      variant="glass"
+                      variant="solid"
                       hover
                       className={`cursor-pointer transition-all ${
                         selectedService?.slug === service.slug
@@ -316,7 +316,7 @@ function BookContent() {
                 Tell us a bit about yourself
               </p>
 
-              <Card variant="glass" className="mb-6">
+              <Card variant="solid" className="mb-6">
                 <CardContent className="flex items-center gap-4 py-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                     {(() => {
@@ -512,7 +512,7 @@ function BookContent() {
                 Review your booking and complete payment
               </p>
 
-              <Card variant="glass" className="mb-6">
+              <Card variant="solid" className="mb-6">
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-start">
                     <div>

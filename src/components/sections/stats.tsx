@@ -1,59 +1,74 @@
 "use client";
 
-import { Users, Clock, TrendingUp, Award } from "lucide-react";
+import { ParticleSphere3D, NetworkVisualization3D } from "@/components/ui/three-visualizations";
+import { DotGrid } from "@/components/ui/particle-background";
 
 const stats = [
   {
-    icon: Users,
     value: "50+",
     label: "Students Mentored",
-    description: "Across Nigeria and beyond",
+    hasDecoration: true,
   },
   {
-    icon: Clock,
     value: "200+",
-    label: "Hours of Sessions",
-    description: "1-on-1 coaching delivered",
+    label: "Hours Delivered",
+    hasDecoration: false,
   },
   {
-    icon: TrendingUp,
     value: "95%",
     label: "Success Rate",
-    description: "Students landed tech roles",
+    hasDecoration: false,
   },
   {
-    icon: Award,
     value: "5+",
     label: "Years Experience",
-    description: "In DevOps & Cloud",
+    hasDecoration: true,
   },
 ];
 
 export function Stats() {
   return (
-    <section className="relative py-20 sm:py-24">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
-
+    <section className="relative py-16 sm:py-20">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
             <div
               key={stat.label}
-              className="text-center p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-primary/20 transition-colors"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 overflow-hidden"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 mb-4">
-                <stat.icon className="w-6 h-6 text-primary" />
+              {/* 3D decorations for specific cards */}
+              {index === 0 && (
+                <div className="absolute -right-10 -bottom-10 opacity-40">
+                  <ParticleSphere3D size={140} />
+                </div>
+              )}
+              {index === 3 && (
+                <div className="absolute right-2 bottom-2 opacity-20">
+                  <DotGrid cols={5} rows={5} spacing={12} />
+                </div>
+              )}
+
+              <div className="relative">
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 tracking-tight">
+                  {stat.value}
+                </div>
+                <div className="text-xs text-gray-600 uppercase tracking-wider">
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
-                {stat.value}
-              </div>
-              <div className="text-sm font-medium text-gray-300 mb-1">
-                {stat.label}
-              </div>
-              <div className="text-xs text-gray-500">{stat.description}</div>
             </div>
           ))}
+        </div>
+
+        {/* Large Network Visualization Card */}
+        <div className="mt-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 flex items-center justify-center min-h-[300px] relative overflow-hidden">
+          <NetworkVisualization3D size={350} />
+          <div className="absolute bottom-6 left-6">
+            <p className="text-xs text-gray-600 uppercase tracking-wider">Building Connections</p>
+          </div>
+          <div className="absolute bottom-6 right-6">
+            <p className="text-xs text-gray-600 uppercase tracking-wider">Growing Network</p>
+          </div>
         </div>
       </div>
     </section>

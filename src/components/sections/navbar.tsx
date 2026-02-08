@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Terminal } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -28,24 +28,23 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         isScrolled
-          ? "bg-zinc-950/80 backdrop-blur-xl border-b border-white/5"
+          ? "bg-[#030303]/80 backdrop-blur-xl border-b border-white/[0.05]"
           : "bg-transparent"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Terminal className="w-5 h-5 text-white" />
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+              <span className="text-sm font-bold text-white">IT</span>
             </div>
             <div className="hidden sm:block">
-              <span className="text-lg font-bold text-white group-hover:text-primary transition-colors">
-                Ifedayo Tech
+              <span className="text-sm font-medium text-white">
+                Ifedayo Tech Academy
               </span>
-              <span className="block text-xs text-gray-400 -mt-1">Academy</span>
             </div>
           </Link>
 
@@ -55,7 +54,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-300 hover:text-primary transition-colors text-sm font-medium"
+                className="text-gray-500 hover:text-white transition-colors text-sm"
               >
                 {link.label}
               </Link>
@@ -71,14 +70,14 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-gray-300 hover:text-white"
+            className="md:hidden p-2 text-gray-400 hover:text-white transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5" />
             )}
           </button>
         </div>
@@ -87,7 +86,7 @@ export function Navbar() {
       {/* Mobile Menu */}
       <div
         className={cn(
-          "md:hidden absolute top-full left-0 right-0 bg-zinc-950/95 backdrop-blur-xl border-b border-white/5 transition-all duration-300 overflow-hidden",
+          "md:hidden absolute top-full left-0 right-0 bg-[#030303]/95 backdrop-blur-xl border-b border-white/[0.05] transition-all duration-300 overflow-hidden",
           isMobileMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
         )}
       >
@@ -96,7 +95,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="block text-gray-300 hover:text-primary transition-colors text-sm font-medium py-2"
+              className="block text-gray-400 hover:text-white transition-colors text-sm py-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.label}

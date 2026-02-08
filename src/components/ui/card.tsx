@@ -4,7 +4,7 @@ import { forwardRef, HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "glass" | "bordered";
+  variant?: "default" | "solid" | "bordered" | "bento";
   hover?: boolean;
 }
 
@@ -13,14 +13,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     const baseStyles = "rounded-2xl transition-all duration-300";
 
     const variants = {
-      default: "bg-zinc-900/80 border border-white/5",
-      glass:
-        "bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl",
-      bordered: "bg-transparent border-2 border-white/10",
+      default: "bg-[#0d0d0d] border border-white/[0.06]",
+      solid: "bg-[#111111] border border-white/[0.08]",
+      bordered: "bg-transparent border border-white/[0.1]",
+      bento: "bg-[#0a0a0a] border border-white/[0.06]",
     };
 
     const hoverStyles = hover
-      ? "hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1"
+      ? "hover:border-white/[0.12] hover:bg-[#141414]"
       : "";
 
     return (

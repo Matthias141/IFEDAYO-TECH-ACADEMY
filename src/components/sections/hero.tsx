@@ -1,83 +1,131 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight, Users, FileText, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GlowingParticleBlob, ParticleSphere3D, GlowingTorus, ParticleWave3D } from "@/components/ui/three-visualizations";
+import { DotGrid, IconCircle } from "@/components/ui/particle-background";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-grid-pattern bg-grid-size opacity-30" />
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
+    <section className="relative min-h-screen overflow-hidden pt-20 pb-12">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Main Hero Card - spans 7 columns */}
+          <div className="lg:col-span-7 lg:row-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 sm:p-12 relative overflow-hidden min-h-[450px] flex flex-col justify-center">
+            {/* 3D Particle Blob in background */}
+            <div className="absolute -top-10 -right-10 opacity-60">
+              <GlowingParticleBlob size={350} />
+            </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
-        <div className="text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-fade-in">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">
-              Join 50+ Nigerian tech talents
-            </span>
-          </div>
-
-          {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-slide-up">
-            Break Into{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-300 to-accent">
-              DevOps
-            </span>
-            <br />
-            With Expert Guidance
-          </h1>
-
-          {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up [animation-delay:100ms]">
-            Get personalized mentoring, CV optimization, and career coaching from
-            an experienced DevOps engineer. Start your cloud journey today.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up [animation-delay:200ms]">
-            <Link href="/book">
-              <Button size="lg" className="w-full sm:w-auto group">
-                Book Your Session
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-            <Link href="#services">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto group">
-                <Play className="w-5 h-5 mr-2" />
-                Explore Services
-              </Button>
-            </Link>
-          </div>
-
-          {/* Social Proof Quick Stats */}
-          <div className="mt-16 pt-8 border-t border-white/5 animate-fade-in [animation-delay:400ms]">
-            <div className="flex flex-wrap justify-center gap-8 sm:gap-12">
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">50+</div>
-                <div className="text-sm text-gray-500">Students Mentored</div>
+            <div className="relative z-10">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
+                <span className="text-xs text-gray-400">
+                  50+ Nigerian tech talents trained
+                </span>
               </div>
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">200+</div>
-                <div className="text-sm text-gray-500">Hours of Sessions</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">95%</div>
-                <div className="text-sm text-gray-500">Success Rate</div>
+
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
+                Break Into
+                <br />
+                <span className="text-gray-500">DevOps</span>
+              </h1>
+
+              {/* Subheadline */}
+              <p className="text-gray-500 max-w-md mb-8 text-sm sm:text-base">
+                Get personalized mentoring, CV optimization, and career coaching
+                from an experienced DevOps engineer.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/book">
+                  <Button size="lg" className="w-full sm:w-auto group">
+                    Book Your Session
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Link href="#services">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                    Explore Services
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-          <div className="w-1 h-2 bg-white/40 rounded-full animate-pulse" />
+          {/* 3D Particle Sphere Card */}
+          <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[260px]">
+            <ParticleSphere3D size={220} />
+            <div className="absolute bottom-4 left-4">
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Expert Guidance</p>
+            </div>
+          </div>
+
+          {/* Stats Cards Row */}
+          <div className="lg:col-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
+            <div className="text-2xl sm:text-3xl font-bold text-white">95%</div>
+            <p className="text-xs text-gray-600 uppercase tracking-wider">Success Rate</p>
+          </div>
+
+          <div className="lg:col-span-3 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+            <div className="absolute right-2 bottom-2 opacity-15">
+              <DotGrid cols={4} rows={4} spacing={10} />
+            </div>
+            <div className="relative">
+              <div className="text-2xl sm:text-3xl font-bold text-white">200+</div>
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Hours Delivered</p>
+            </div>
+          </div>
+
+          {/* Glowing Torus Card */}
+          <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl flex items-center justify-center relative overflow-hidden min-h-[200px]">
+            <GlowingTorus size={200} />
+            <div className="absolute bottom-4 left-4">
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Continuous Growth</p>
+            </div>
+          </div>
+
+          {/* Feature cards with icons */}
+          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden">
+            <div className="relative">
+              <IconCircle size={40} className="mb-4">
+                <Users className="w-4 h-4 text-gray-400" />
+              </IconCircle>
+              <h3 className="text-base font-semibold text-white mb-1">1-on-1 Mentoring</h3>
+              <p className="text-sm text-gray-500">Personalized sessions for your goals</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden">
+            <div className="relative">
+              <IconCircle size={40} className="mb-4">
+                <FileText className="w-4 h-4 text-gray-400" />
+              </IconCircle>
+              <h3 className="text-base font-semibold text-white mb-1">CV Optimization</h3>
+              <p className="text-sm text-gray-500">Get noticed by top recruiters</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6">
+            <IconCircle size={40} className="mb-4">
+              <Target className="w-4 h-4 text-gray-400" />
+            </IconCircle>
+            <h3 className="text-base font-semibold text-white mb-1">Career Strategy</h3>
+            <p className="text-sm text-gray-500">Map your path to DevOps</p>
+          </div>
+
+          {/* Wave visualization spanning full width */}
+          <div className="lg:col-span-12 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl relative overflow-hidden min-h-[180px] flex items-center justify-center">
+            <ParticleWave3D size={800} height={180} />
+            <div className="absolute bottom-4 left-6">
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Your Journey Starts Here</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
