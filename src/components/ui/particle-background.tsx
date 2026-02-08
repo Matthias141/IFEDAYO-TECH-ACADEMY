@@ -497,6 +497,156 @@ export function NetworkDecoration({ className = "" }: { className?: string }) {
   );
 }
 
+// 3D Torus/Ring visualization (like "Frictionless flow" in reference)
+export function ParticleTorus({
+  size = 200,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = size * 2;
+    canvas.height = size * 2;
+
+    const centerX = size;
+    const centerY = size;
+    const majorRadius = size * 0.5;
+    const minorRadius = size * 0.2;
+    const particleCount = 600;
+    let rotation = 0;
+
+    // Generate points on a torus
+    const points: { u: number; v: number; size: number }[] = [];
+    for (let i = 0; i < particleCount; i++) {
+      points.push({
+        u: Math.random() * Math.PI * 2,
+        v: Math.random() * Math.PI * 2,
+        size: Math.random() * 1.5 + 0.5,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      rotation += 0.005;
+
+      const sortedPoints = points
+        .map((p) => {
+          // Torus parametric equations with rotation
+          const cosU = Math.cos(p.u + rotation);
+          const sinU = Math.sin(p.u + rotation);
+          const cosV = Math.cos(p.v);
+          const sinV = Math.sin(p.v);
+
+          const x = (majorRadius + minorRadius * cosV) * cosU;
+          const y = minorRadius * sinV;
+          const z = (majorRadius + minorRadius * cosV) * sinU;
+
+          // Apply slight tilt
+          const tiltAngle = 0.4;
+          const y2 = y * Math.cos(tiltAngle) - z * Math.sin(tiltAngle);
+          const z2 = y * Math.sin(tiltAngle) + z * Math.cos(tiltAngle);
+
+          return { ...p, x, y: y2, z: z2 };
+        })
+        .sort((a, b) => a.z - b.z);
+
+      sortedPoints.forEach((p) => {
+        const screenX = centerX + p.x;
+        const screenY = centerY + p.y;
+        const depth = (p.z / (majorRadius + minorRadius) + 1) / 2;
+        const opacity = 0.1 + depth * 0.5;
+        const dotSize = p.size * (0.4 + depth * 0.6);
+
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, dotSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.fill();
+
+        // Add glow to front particles
+        if (depth > 0.7) {
+          const gradient = ctx.createRadialGradient(
+            screenX, screenY, 0,
+            screenX, screenY, dotSize * 3
+          );
+          gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity * 0.3})`);
+          gradient.addColorStop(1, "transparent");
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, dotSize * 3, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+        }
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [size]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`pointer-events-none ${className}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
+// Grid of dots decoration
+export function DotGrid({
+  cols = 8,
+  rows = 8,
+  spacing = 20,
+  className = "",
+}: {
+  cols?: number;
+  rows?: number;
+  spacing?: number;
+  className?: string;
+}) {
+  const width = cols * spacing;
+  const height = rows * spacing;
+
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      className={`pointer-events-none ${className}`}
+    >
+      {Array.from({ length: cols * rows }).map((_, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = col * spacing + spacing / 2;
+        const y = row * spacing + spacing / 2;
+        return (
+          <circle
+            key={i}
+            cx={x}
+            cy={y}
+            r={1}
+            fill="rgba(255, 255, 255, 0.15)"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 // Simple glow orb (no blur, just gradient)
 export function GlowingOrb({
   size = 300,

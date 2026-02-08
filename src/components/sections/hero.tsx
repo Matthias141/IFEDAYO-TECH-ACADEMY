@@ -1,18 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users, FileText, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ParticleSphere, ParticleBlob, CircleRing } from "@/components/ui/particle-background";
+import { ParticleSphere, ParticleBlob, ParticleTorus, CircleRing, IconCircle, DotGrid } from "@/components/ui/particle-background";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen overflow-hidden pt-20 pb-12">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Main Hero Card - spans 7 columns */}
-          <div className="lg:col-span-7 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 sm:p-12 relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+          <div className="lg:col-span-7 lg:row-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-8 sm:p-12 relative overflow-hidden min-h-[450px] flex flex-col justify-center">
             {/* Subtle particle blob in background */}
             <div className="absolute -top-20 -right-20 opacity-30">
               <ParticleBlob size={300} />
@@ -57,46 +57,63 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right side cards - 5 columns */}
-          <div className="lg:col-span-5 grid grid-cols-2 gap-4 lg:gap-6">
-            {/* Particle Sphere Card */}
-            <div className="col-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[220px]">
-              <ParticleSphere size={180} />
-              <div className="absolute bottom-4 left-4">
-                <p className="text-xs text-gray-600 uppercase tracking-wider">Expert Guidance</p>
-              </div>
+          {/* Particle Sphere Card */}
+          <div className="lg:col-span-5 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex items-center justify-center relative overflow-hidden min-h-[220px]">
+            <ParticleSphere size={160} />
+            <div className="absolute bottom-4 left-4">
+              <p className="text-xs text-gray-600 uppercase tracking-wider">Expert Guidance</p>
             </div>
+          </div>
 
-            {/* Stats Card 1 */}
-            <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex flex-col justify-between min-h-[140px]">
-              <div className="text-3xl sm:text-4xl font-bold text-white">95%</div>
-              <p className="text-xs text-gray-600 uppercase tracking-wider">Success Rate</p>
+          {/* Stats Cards Row */}
+          <div className="lg:col-span-2 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
+            <div className="text-2xl sm:text-3xl font-bold text-white">95%</div>
+            <p className="text-xs text-gray-600 uppercase tracking-wider">Success Rate</p>
+          </div>
+
+          <div className="lg:col-span-3 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-5 flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+            <div className="absolute right-2 bottom-2 opacity-15">
+              <DotGrid cols={4} rows={4} spacing={10} />
             </div>
-
-            {/* Stats Card 2 */}
-            <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 flex flex-col justify-between min-h-[140px]">
-              <div className="text-3xl sm:text-4xl font-bold text-white">200+</div>
+            <div className="relative">
+              <div className="text-2xl sm:text-3xl font-bold text-white">200+</div>
               <p className="text-xs text-gray-600 uppercase tracking-wider">Hours Delivered</p>
             </div>
           </div>
 
-          {/* Bottom row - feature cards */}
-          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden min-h-[180px]">
-            <div className="absolute -right-10 -bottom-10 opacity-40">
-              <CircleRing size={150} />
+          {/* Feature cards with icons */}
+          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden">
+            <div className="absolute -right-12 -bottom-12 opacity-30">
+              <CircleRing size={140} />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">1-on-1 Mentoring</h3>
-            <p className="text-sm text-gray-500">Personalized sessions tailored to your career goals</p>
+            <div className="relative">
+              <IconCircle size={40} className="mb-4">
+                <Users className="w-4 h-4 text-gray-400" />
+              </IconCircle>
+              <h3 className="text-base font-semibold text-white mb-1">1-on-1 Mentoring</h3>
+              <p className="text-sm text-gray-500">Personalized sessions for your goals</p>
+            </div>
           </div>
 
-          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 min-h-[180px]">
-            <h3 className="text-lg font-semibold text-white mb-2">CV Optimization</h3>
-            <p className="text-sm text-gray-500">Get your CV noticed by top tech recruiters</p>
+          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 relative overflow-hidden">
+            <div className="absolute -right-10 -top-10 opacity-20">
+              <ParticleTorus size={120} />
+            </div>
+            <div className="relative">
+              <IconCircle size={40} className="mb-4">
+                <FileText className="w-4 h-4 text-gray-400" />
+              </IconCircle>
+              <h3 className="text-base font-semibold text-white mb-1">CV Optimization</h3>
+              <p className="text-sm text-gray-500">Get noticed by top recruiters</p>
+            </div>
           </div>
 
-          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 min-h-[180px]">
-            <h3 className="text-lg font-semibold text-white mb-2">Career Strategy</h3>
-            <p className="text-sm text-gray-500">Map out your path to a DevOps career</p>
+          <div className="lg:col-span-4 bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6">
+            <IconCircle size={40} className="mb-4">
+              <Target className="w-4 h-4 text-gray-400" />
+            </IconCircle>
+            <h3 className="text-base font-semibold text-white mb-1">Career Strategy</h3>
+            <p className="text-sm text-gray-500">Map your path to DevOps</p>
           </div>
         </div>
       </div>
