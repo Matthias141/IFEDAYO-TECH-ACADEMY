@@ -55,22 +55,22 @@ export function Services() {
                 <div
                   className="group relative h-full bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] overflow-hidden glow-card"
                 >
-                  {/* 3D Wave visualization for large card */}
+                  {/* 3D Wave visualization for large card - hidden on mobile */}
                   {isLarge && (
-                    <div className="absolute bottom-0 left-0 right-0 opacity-40 overflow-hidden rounded-b-2xl">
-                      <ParticleWave3D size={700} height={180} enableBloom={false} />
+                    <div className="absolute bottom-0 left-0 right-0 opacity-40 overflow-hidden rounded-b-2xl hidden sm:block">
+                      <ParticleWave3D size={500} height={140} enableBloom={false} />
                     </div>
                   )}
 
-                  {/* 3D decorations for other cards */}
+                  {/* 3D decorations for other cards - hidden on mobile */}
                   {index === 1 && (
-                    <div className="absolute -right-12 -bottom-12 opacity-30">
-                      <GlowingTorus size={150} enableBloom={false} />
+                    <div className="absolute -right-12 -bottom-12 opacity-30 hidden lg:block">
+                      <GlowingTorus size={120} enableBloom={false} />
                     </div>
                   )}
                   {index === 2 && (
-                    <div className="absolute -right-10 -top-10 opacity-25">
-                      <ParticleSphere3D size={120} enableBloom={false} />
+                    <div className="absolute -right-10 -top-10 opacity-25 hidden lg:block">
+                      <ParticleSphere3D size={100} enableBloom={false} />
                     </div>
                   )}
 
