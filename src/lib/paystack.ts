@@ -1,7 +1,20 @@
 import crypto from "crypto";
 
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY!;
-const PAYSTACK_WEBHOOK_SECRET = process.env.PAYSTACK_WEBHOOK_SECRET!;
+function getPaystackSecretKey(): string {
+  const key = process.env.PAYSTACK_SECRET_KEY;
+  if (!key) {
+    throw new Error("Missing PAYSTACK_SECRET_KEY environment variable");
+  }
+  return key;
+}
+
+function getPaystackWebhookSecret(): string {
+  const secret = process.env.PAYSTACK_WEBHOOK_SECRET;
+  if (!secret) {
+    throw new Error("Missing PAYSTACK_WEBHOOK_SECRET environment variable");
+  }
+  return secret;
+}
 
 interface PaystackInitResponse {
   status: boolean;
@@ -50,7 +63,7 @@ export async function initializePayment(
   const response = await fetch("https://api.paystack.co/transaction/initialize", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
+      Authorization: `Bearer ${getPaystackSecretKey()}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -75,7 +88,7 @@ export async function verifyPayment(reference: string): Promise<PaystackVerifyRe
     {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${getPaystackSecretKey()}`,
       },
     }
   );
@@ -89,7 +102,7 @@ export async function verifyPayment(reference: string): Promise<PaystackVerifyRe
 
 export function verifyWebhookSignature(body: string, signature: string): boolean {
   const hash = crypto
-    .createHmac("sha512", PAYSTACK_WEBHOOK_SECRET)
+    .createHmac("sha512", getPaystackWebhookSecret())
     .update(body)
     .digest("hex");
 
