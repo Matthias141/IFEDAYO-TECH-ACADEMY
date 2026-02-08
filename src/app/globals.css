@@ -74,6 +74,30 @@ body {
     @apply hover:border-white/[0.1] hover:bg-white/[0.03] transition-all duration-500;
   }
 
+  /* Glow card hover effect */
+  .glow-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+
   /* Subtle glow effects */
   .glow-orb {
     position: absolute;
@@ -98,5 +122,23 @@ body {
   .network-line {
     @apply bg-gradient-to-r from-white/5 via-white/10 to-white/5;
     height: 1px;
+  }
+
+  /* Gradient overlays */
+  .gradient-overlay-top {
+    background: linear-gradient(to bottom, var(--background) 0%, transparent 100%);
+  }
+
+  .gradient-overlay-bottom {
+    background: linear-gradient(to top, var(--background) 0%, transparent 100%);
+  }
+
+  /* Radial gradient background */
+  .radial-gradient-bg {
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 100%
+    );
   }
 }
