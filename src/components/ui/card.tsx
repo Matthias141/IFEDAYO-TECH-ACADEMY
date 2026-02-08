@@ -4,34 +4,29 @@ import { forwardRef, HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "glass" | "bordered" | "bento";
+  variant?: "default" | "solid" | "bordered" | "bento";
   hover?: boolean;
-  glow?: boolean;
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = "default", hover = false, glow = false, children, ...props }, ref) => {
-    const baseStyles = "rounded-3xl transition-all duration-500";
+  ({ className, variant = "default", hover = false, children, ...props }, ref) => {
+    const baseStyles = "rounded-2xl transition-all duration-300";
 
     const variants = {
-      default: "bg-white/[0.02] border border-white/[0.05]",
-      glass: "bg-white/[0.03] backdrop-blur-xl border border-white/[0.08]",
-      bordered: "bg-transparent border border-white/[0.08]",
-      bento: "bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm",
+      default: "bg-[#0d0d0d] border border-white/[0.06]",
+      solid: "bg-[#111111] border border-white/[0.08]",
+      bordered: "bg-transparent border border-white/[0.1]",
+      bento: "bg-[#0a0a0a] border border-white/[0.06]",
     };
 
     const hoverStyles = hover
-      ? "hover:border-white/[0.15] hover:bg-white/[0.04] hover:-translate-y-1"
-      : "";
-
-    const glowStyles = glow
-      ? "shadow-[0_0_50px_rgba(255,255,255,0.03)]"
+      ? "hover:border-white/[0.12] hover:bg-[#141414]"
       : "";
 
     return (
       <div
         ref={ref}
-        className={cn(baseStyles, variants[variant], hoverStyles, glowStyles, className)}
+        className={cn(baseStyles, variants[variant], hoverStyles, className)}
         {...props}
       >
         {children}

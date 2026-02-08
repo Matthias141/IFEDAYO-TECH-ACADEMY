@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { servicesData } from "@/lib/services-data";
 import { formatPrice, formatDuration, getServiceTypeLabel } from "@/lib/utils";
-import { GlowingOrb } from "@/components/ui/particle-background";
+import { ParticleWave, IconCircle } from "@/components/ui/particle-background";
 
 const iconMap: Record<string, typeof Video> = {
   video: Video,
@@ -23,20 +23,17 @@ const iconMap: Record<string, typeof Video> = {
 
 export function Services() {
   return (
-    <section id="services" className="relative py-24 sm:py-32 overflow-hidden">
-      {/* Subtle background glow */}
-      <GlowingOrb size={500} color="white" className="-top-48 left-1/2 -translate-x-1/2" blur={150} />
-
+    <section id="services" className="relative py-20 sm:py-28">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-sm text-gray-500 uppercase tracking-wider mb-3">
+          <p className="text-xs text-gray-600 uppercase tracking-wider mb-3">
             Our Services
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
             Choose Your Path
           </h2>
-          <p className="text-gray-500 max-w-xl mx-auto">
+          <p className="text-gray-500 max-w-xl mx-auto text-sm">
             Whether you&apos;re just starting out or looking to level up, we have the
             right service for your DevOps journey.
           </p>
@@ -51,19 +48,23 @@ export function Services() {
             return (
               <div
                 key={service.slug}
-                className={`group relative bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:border-white/[0.1] hover:bg-white/[0.03] ${
+                className={`group relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] ${
                   isLarge ? "lg:col-span-2 lg:row-span-2" : ""
                 }`}
               >
-                {/* Subtle corner glow on hover */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/[0.02] rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Wave visualization for large card */}
+                {isLarge && (
+                  <div className="absolute bottom-0 left-0 right-0 opacity-30 overflow-hidden rounded-b-2xl">
+                    <ParticleWave width={600} height={150} />
+                  </div>
+                )}
 
                 <div className="relative">
                   {/* Icon and Type */}
                   <div className="flex items-start justify-between mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center">
+                    <IconCircle size={48}>
                       <Icon className="w-5 h-5 text-gray-400" />
-                    </div>
+                    </IconCircle>
                     <span className="text-xs text-gray-600 uppercase tracking-wider">
                       {getServiceTypeLabel(service.type)}
                     </span>
@@ -85,7 +86,7 @@ export function Services() {
                           key={feature}
                           className="flex items-center gap-2 text-sm text-gray-400"
                         >
-                          <span className="w-1 h-1 rounded-full bg-gray-600" />
+                          <span className="w-1 h-1 rounded-full bg-white/30" />
                           {feature}
                         </div>
                       ))}
@@ -99,7 +100,7 @@ export function Services() {
                   </div>
 
                   {/* Price and CTA */}
-                  <div className="flex items-center justify-between pt-4 border-t border-white/[0.05]">
+                  <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
                     <div>
                       <span className="text-2xl font-bold text-white">
                         {formatPrice(service.price_ngn)}

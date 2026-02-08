@@ -2,15 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  opacity: number;
-}
-
+// Simple network particle background
 interface ParticleBackgroundProps {
   particleCount?: number;
   connectionDistance?: number;
@@ -18,12 +10,11 @@ interface ParticleBackgroundProps {
 }
 
 export function ParticleBackground({
-  particleCount = 50,
-  connectionDistance = 150,
+  particleCount = 40,
+  connectionDistance = 120,
   className = "",
 }: ParticleBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number>();
 
   useEffect(() => {
@@ -34,63 +25,46 @@ export function ParticleBackground({
     if (!ctx) return;
 
     const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     };
 
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
 
-    // Initialize particles
-    particlesRef.current = Array.from({ length: particleCount }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      radius: Math.random() * 2 + 1,
-      opacity: Math.random() * 0.5 + 0.1,
+    const particles = Array.from({ length: particleCount }, () => ({
+      x: Math.random() * canvas.offsetWidth,
+      y: Math.random() * canvas.offsetHeight,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      radius: Math.random() * 1.5 + 0.5,
     }));
 
     const animate = () => {
-      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
 
-      const particles = particlesRef.current;
-
-      // Update and draw particles
-      particles.forEach((particle, i) => {
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        // Bounce off edges
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-
-        // Keep within bounds
-        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
-        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        if (p.x < 0 || p.x > canvas.offsetWidth) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.offsetHeight) p.vy *= -1;
 
         // Draw particle
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
         ctx.fill();
 
         // Draw connections
         for (let j = i + 1; j < particles.length; j++) {
           const other = particles[j];
-          const dx = particle.x - other.x;
-          const dy = particle.y - other.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < connectionDistance) {
-            const opacity = (1 - distance / connectionDistance) * 0.15;
+          const dist = Math.hypot(p.x - other.x, p.y - other.y);
+          if (dist < connectionDistance) {
             ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
+            ctx.moveTo(p.x, p.y);
             ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - dist / connectionDistance)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -102,11 +76,10 @@ export function ParticleBackground({
 
     animate();
 
+    window.addEventListener("resize", resizeCanvas);
     return () => {
       window.removeEventListener("resize", resizeCanvas);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, [particleCount, connectionDistance]);
 
@@ -114,26 +87,429 @@ export function ParticleBackground({
     <canvas
       ref={canvasRef}
       className={`absolute inset-0 w-full h-full pointer-events-none ${className}`}
-      style={{ opacity: 0.6 }}
     />
   );
 }
 
-// Static decorative elements for areas where canvas isn't needed
+// 3D Particle Sphere - like in the reference image
+export function ParticleSphere({
+  size = 200,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = size * 2;
+    canvas.height = size * 2;
+
+    const centerX = size;
+    const centerY = size;
+    const radius = size * 0.7;
+    const particleCount = 800;
+    let rotation = 0;
+
+    // Generate points on a sphere using fibonacci sphere algorithm
+    const points: { theta: number; phi: number; size: number }[] = [];
+    const goldenRatio = (1 + Math.sqrt(5)) / 2;
+
+    for (let i = 0; i < particleCount; i++) {
+      const y = 1 - (i / (particleCount - 1)) * 2;
+      const theta = (2 * Math.PI * i) / goldenRatio;
+      const phi = Math.acos(y);
+      points.push({
+        theta,
+        phi,
+        size: Math.random() * 1.5 + 0.5
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      rotation += 0.003;
+
+      // Sort points by z-depth for proper rendering
+      const sortedPoints = points
+        .map((p) => {
+          const x = Math.sin(p.phi) * Math.cos(p.theta + rotation);
+          const y = Math.cos(p.phi);
+          const z = Math.sin(p.phi) * Math.sin(p.theta + rotation);
+          return { ...p, x, y, z };
+        })
+        .sort((a, b) => a.z - b.z);
+
+      sortedPoints.forEach((p) => {
+        const screenX = centerX + p.x * radius;
+        const screenY = centerY + p.y * radius;
+        const depth = (p.z + 1) / 2; // 0 to 1
+        const opacity = 0.1 + depth * 0.6;
+        const dotSize = p.size * (0.5 + depth * 0.5);
+
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, dotSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.fill();
+
+        // Add glow to front-facing particles
+        if (depth > 0.7) {
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, dotSize * 2, 0, Math.PI * 2);
+          const gradient = ctx.createRadialGradient(
+            screenX, screenY, 0,
+            screenX, screenY, dotSize * 3
+          );
+          gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity * 0.3})`);
+          gradient.addColorStop(1, "transparent");
+          ctx.fillStyle = gradient;
+          ctx.fill();
+        }
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [size]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`pointer-events-none ${className}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
+// Wave/Flow Particle Visualization
+export function ParticleWave({
+  width = 400,
+  height = 200,
+  className = "",
+}: {
+  width?: number;
+  height?: number;
+  className?: string;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    let time = 0;
+    const cols = 60;
+    const rows = 20;
+    const spacing = width / cols;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      time += 0.02;
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * spacing + spacing / 2;
+          const baseY = height / 2;
+
+          // Create wave effect
+          const wave1 = Math.sin(i * 0.15 + time) * 30;
+          const wave2 = Math.sin(i * 0.1 - time * 0.8) * 20;
+
+          const y = baseY + wave1 + wave2 + (j - rows / 2) * 4;
+
+          // Distance from center affects opacity
+          const distFromCenter = Math.abs(j - rows / 2) / (rows / 2);
+          const opacity = 0.1 + (1 - distFromCenter) * 0.4;
+
+          const dotSize = 1 + (1 - distFromCenter) * 1;
+
+          ctx.beginPath();
+          ctx.arc(x, y, dotSize, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+          ctx.fill();
+        }
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [width, height]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`pointer-events-none ${className}`}
+      style={{ width, height }}
+    />
+  );
+}
+
+// Flowing organic blob shape made of particles
+export function ParticleBlob({
+  size = 300,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    ctx.scale(dpr, dpr);
+
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const baseRadius = size * 0.3;
+    let time = 0;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, size, size);
+      time += 0.008;
+
+      // Draw flowing blob shape with particles
+      const particleCount = 400;
+
+      for (let i = 0; i < particleCount; i++) {
+        const angle = (i / particleCount) * Math.PI * 2;
+        const layer = Math.floor(i / 100);
+        const layerOffset = layer * 0.3;
+
+        // Organic deformation
+        const deform1 = Math.sin(angle * 3 + time) * 20;
+        const deform2 = Math.cos(angle * 2 - time * 0.7) * 15;
+        const deform3 = Math.sin(angle * 5 + time * 1.3) * 10;
+
+        const r = baseRadius + deform1 + deform2 + deform3 + layer * 15;
+
+        const x = centerX + Math.cos(angle + layerOffset + time * 0.1) * r;
+        const y = centerY + Math.sin(angle + layerOffset + time * 0.1) * r;
+
+        const opacity = 0.15 + (1 - layer / 4) * 0.35;
+        const dotSize = 1 + Math.random() * 1;
+
+        ctx.beginPath();
+        ctx.arc(x, y, dotSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.fill();
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [size]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`pointer-events-none ${className}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
+// Circular ring decoration with dots
+export function CircleRing({
+  size = 200,
+  className = "",
+  dotted = true,
+}: {
+  size?: number;
+  className?: string;
+  dotted?: boolean;
+}) {
+  const dots = dotted ? 48 : 0;
+  const radius = size / 2 - 10;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className={`pointer-events-none ${className}`}
+    >
+      {/* Main circle */}
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        fill="none"
+        stroke="rgba(255, 255, 255, 0.08)"
+        strokeWidth="1"
+      />
+      {/* Dots around the circle */}
+      {Array.from({ length: dots }).map((_, i) => {
+        const angle = (i / dots) * Math.PI * 2 - Math.PI / 2;
+        const x = size / 2 + Math.cos(angle) * radius;
+        const y = size / 2 + Math.sin(angle) * radius;
+        return (
+          <circle
+            key={i}
+            cx={x}
+            cy={y}
+            r={i % 6 === 0 ? 2 : 1}
+            fill={`rgba(255, 255, 255, ${i % 6 === 0 ? 0.4 : 0.2})`}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+// Icon circle with thin border (like in reference)
+export function IconCircle({
+  children,
+  size = 64,
+  className = "",
+}: {
+  children: React.ReactNode;
+  size?: number;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`rounded-full border border-white/[0.15] flex items-center justify-center ${className}`}
+      style={{ width: size, height: size }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// Network decoration with connected nodes
+export function NetworkDecoration({ className = "" }: { className?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const size = 400;
+    canvas.width = size;
+    canvas.height = size;
+
+    // Define nodes
+    const nodes = [
+      { x: 80, y: 80 }, { x: 200, y: 60 }, { x: 320, y: 100 },
+      { x: 60, y: 200 }, { x: 180, y: 180 }, { x: 280, y: 200 },
+      { x: 100, y: 300 }, { x: 220, y: 280 }, { x: 340, y: 320 },
+      { x: 160, y: 360 }, { x: 300, y: 380 },
+    ];
+
+    // Define connections
+    const connections = [
+      [0, 1], [1, 2], [0, 3], [0, 4], [1, 4], [2, 5],
+      [3, 4], [4, 5], [3, 6], [4, 7], [5, 8],
+      [6, 7], [7, 8], [6, 9], [7, 9], [8, 10], [9, 10],
+    ];
+
+    let time = 0;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, size, size);
+      time += 0.01;
+
+      // Draw connections
+      connections.forEach(([i, j]) => {
+        const a = nodes[i];
+        const b = nodes[j];
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      // Draw nodes
+      nodes.forEach((node, i) => {
+        const pulse = Math.sin(time + i * 0.5) * 0.3 + 1;
+        const nodeSize = (2 + (i % 3)) * pulse;
+
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, nodeSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.2 + (i % 3) * 0.1})`;
+        ctx.fill();
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={400}
+      height={400}
+      className={`pointer-events-none ${className}`}
+      style={{ width: 400, height: 400 }}
+    />
+  );
+}
+
+// Simple glow orb (no blur, just gradient)
 export function GlowingOrb({
   size = 300,
   color = "white",
   className = "",
-  blur = 100,
 }: {
   size?: number;
   color?: "white" | "blue";
   className?: string;
-  blur?: number;
 }) {
   const colorMap = {
-    white: "rgba(255, 255, 255, 0.03)",
-    blue: "rgba(59, 130, 246, 0.05)",
+    white: "rgba(255, 255, 255, 0.02)",
+    blue: "rgba(100, 150, 255, 0.03)",
   };
 
   return (
@@ -143,69 +519,7 @@ export function GlowingOrb({
         width: size,
         height: size,
         background: `radial-gradient(circle, ${colorMap[color]} 0%, transparent 70%)`,
-        filter: `blur(${blur}px)`,
       }}
     />
-  );
-}
-
-// Network nodes decoration (static SVG version)
-export function NetworkDecoration({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={`absolute pointer-events-none ${className}`}
-      viewBox="0 0 400 400"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Nodes */}
-      <circle cx="100" cy="100" r="3" fill="rgba(255,255,255,0.3)" />
-      <circle cx="200" cy="80" r="2" fill="rgba(255,255,255,0.2)" />
-      <circle cx="300" cy="120" r="4" fill="rgba(255,255,255,0.25)" />
-      <circle cx="150" cy="200" r="3" fill="rgba(255,255,255,0.2)" />
-      <circle cx="250" cy="180" r="2" fill="rgba(255,255,255,0.3)" />
-      <circle cx="350" cy="250" r="3" fill="rgba(255,255,255,0.2)" />
-      <circle cx="80" cy="280" r="2" fill="rgba(255,255,255,0.25)" />
-      <circle cx="180" cy="320" r="4" fill="rgba(255,255,255,0.2)" />
-      <circle cx="280" cy="300" r="2" fill="rgba(255,255,255,0.3)" />
-      <circle cx="320" cy="350" r="3" fill="rgba(255,255,255,0.2)" />
-
-      {/* Connections */}
-      <line x1="100" y1="100" x2="200" y2="80" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <line x1="200" y1="80" x2="300" y2="120" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <line x1="100" y1="100" x2="150" y2="200" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <line x1="150" y1="200" x2="250" y2="180" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <line x1="250" y1="180" x2="300" y2="120" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <line x1="250" y1="180" x2="350" y2="250" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <line x1="80" y1="280" x2="150" y2="200" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <line x1="80" y1="280" x2="180" y2="320" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <line x1="180" y1="320" x2="280" y2="300" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <line x1="280" y1="300" x2="350" y2="250" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <line x1="280" y1="300" x2="320" y2="350" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-    </svg>
-  );
-}
-
-// Flowing organic shape decoration
-export function FlowingShape({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      className={`absolute pointer-events-none ${className}`}
-      viewBox="0 0 600 400"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.02)" />
-          <stop offset="50%" stopColor="rgba(255,255,255,0.05)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M0 200 Q150 100 300 200 T600 200 L600 400 L0 400 Z"
-        fill="url(#flowGradient)"
-      />
-    </svg>
   );
 }

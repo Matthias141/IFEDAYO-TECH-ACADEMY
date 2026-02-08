@@ -39,17 +39,17 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="relative py-24 sm:py-32">
+    <section id="testimonials" className="relative py-20 sm:py-28">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-sm text-gray-500 uppercase tracking-wider mb-3">
+          <p className="text-xs text-gray-600 uppercase tracking-wider mb-3">
             Testimonials
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
             Success Stories
           </h2>
-          <p className="text-gray-500 max-w-xl mx-auto">
+          <p className="text-gray-500 max-w-xl mx-auto text-sm">
             Don&apos;t just take our word for it. Here&apos;s what our students have to say.
           </p>
         </div>
@@ -59,23 +59,23 @@ export function Testimonials() {
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className={`group relative bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:border-white/[0.1] hover:bg-white/[0.03] ${
+              className={`group relative bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] ${
                 index === 0 ? "md:row-span-2" : ""
               }`}
             >
               {/* Quote Icon */}
               <div className="mb-6">
-                <Quote className="w-8 h-8 text-white/[0.1]" />
+                <Quote className="w-8 h-8 text-white/[0.08]" />
               </div>
 
               {/* Content */}
-              <p className={`text-gray-400 leading-relaxed mb-8 ${index === 0 ? "text-lg" : ""}`}>
+              <p className={`text-gray-400 leading-relaxed mb-8 ${index === 0 ? "text-base" : "text-sm"}`}>
                 &quot;{testimonial.content}&quot;
               </p>
 
               {/* Author */}
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-gray-400 text-sm font-medium">
+                <div className="w-10 h-10 rounded-full bg-[#111] border border-white/[0.08] flex items-center justify-center text-gray-500 text-sm font-medium">
                   {testimonial.name
                     .split(" ")
                     .map((n) => n[0])
