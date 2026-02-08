@@ -2,11 +2,12 @@ import { Resend } from "resend";
 
 let resendClient: Resend | null = null;
 
-function getResend(): Resend {
+function getResend(): Resend | null {
   if (!resendClient) {
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
-      throw new Error("Missing RESEND_API_KEY environment variable");
+      console.warn("Missing RESEND_API_KEY environment variable - emails will not be sent");
+      return null;
     }
     resendClient = new Resend(apiKey);
   }
@@ -96,7 +97,12 @@ export async function sendBookingConfirmation(data: BookingEmailData) {
   `;
 
   try {
-    const result = await getResend().emails.send({
+    const resend = getResend();
+    if (!resend) {
+      return { success: false, error: "Email service not configured" };
+    }
+
+    const result = await resend.emails.send({
       from: "Ifedayo Tech Academy <bookings@ifedayotech.com>",
       to,
       subject,
@@ -172,7 +178,12 @@ export async function sendPaymentReceipt(data: BookingEmailData) {
   `;
 
   try {
-    const result = await getResend().emails.send({
+    const resend = getResend();
+    if (!resend) {
+      return { success: false, error: "Email service not configured" };
+    }
+
+    const result = await resend.emails.send({
       from: "Ifedayo Tech Academy <bookings@ifedayotech.com>",
       to,
       subject,
@@ -250,7 +261,12 @@ export async function sendSessionReminder(data: Omit<BookingEmailData, "amount" 
   `;
 
   try {
-    const result = await getResend().emails.send({
+    const resend = getResend();
+    if (!resend) {
+      return { success: false, error: "Email service not configured" };
+    }
+
+    const result = await resend.emails.send({
       from: "Ifedayo Tech Academy <bookings@ifedayotech.com>",
       to,
       subject,
