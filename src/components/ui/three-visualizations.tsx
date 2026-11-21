@@ -1,10 +1,34 @@
 "use client";
 
 import { useRef, useMemo, useEffect, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import type { ComponentProps } from "react";
+import { Canvas as FiberCanvas, useFrame } from "@react-three/fiber";
 import { PointMaterial, Points, Line } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+
+function Canvas(props: ComponentProps<typeof FiberCanvas>) {
+  const container = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = container.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setVisible(entry.isIntersecting);
+    });
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={container} style={{ width: "100%", height: "100%" }}>
+      {visible && <FiberCanvas {...props} />}
+    </div>
+  );
+}
 
 // Hook for detecting mobile/low-performance devices
 function useIsMobile() {
