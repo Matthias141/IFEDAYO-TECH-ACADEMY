@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { createSupabaseUserClient, supabaseAdmin } from "@/lib/supabase/server";
 import { bookingFormSchema } from "@/lib/validations";
 import { z } from "zod";
 
@@ -95,8 +95,24 @@ export async function POST(request: NextRequest) {
   }
 }
 
+function unauthorized() {
+  return NextResponse.json(
+    { success: false, error: "Authentication required" },
+    { status: 401, headers: { "WWW-Authenticate": "Bearer" } }
+  );
+}
+
 export async function GET(request: NextRequest) {
   try {
+    const accessToken = request.headers
+      .get("authorization")
+      ?.match(/^Bearer +(\S+)$/i)?.[1];
+    if (!accessToken) return unauthorized();
+
+    const supabase = createSupabaseUserClient(accessToken);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !user) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const bookingId = searchParams.get("id");
 
@@ -107,7 +123,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data: booking, error } = await supabaseAdmin
+    const { data: booking, error } = await supabase
       .from("bookings")
       .select(`
         *,
@@ -116,6 +132,7 @@ export async function GET(request: NextRequest) {
         payment:payments(*)
       `)
       .eq("id", bookingId)
+      .eq("user_id", user.id)
       .single();
 
     if (error || !booking) {
@@ -125,10 +142,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      data: booking,
-    });
+    return NextResponse.json(
+      { success: true, data: booking },
+      { headers: { "Cache-Control": "private, no-store" } }
+    );
   } catch (error) {
     console.error("Get booking error:", error);
     return NextResponse.json(
