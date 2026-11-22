@@ -71,6 +71,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the site.
 
+Run the automated booking API tests with `npm test`. They don't require live Supabase credentials.
+
+### Booking API
+
+`GET /api/bookings?id=<booking-id>` requires a Supabase user access token in
+`Authorization: Bearer <access-token>`. It returns `401` without a valid token
+and `404` for bookings that are missing or belong to another user.
+
 ## Project Structure
 
 ```
